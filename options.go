@@ -15,14 +15,14 @@ var defaultOptions = &options{
 	httpClient: http.DefaultClient,
 }
 
-// WithBaseURL sets baseURL as ClientOption
+// WithBaseURL sets baseURL as ClientOption.
 func WithBaseURL(baseURL string) ClientOption {
 	return func(o *options) {
 		o.baseURL = baseURL
 	}
 }
 
-// WithHTTPClient sets httpClient as ClientOption
+// WithHTTPClient sets httpClient as ClientOption.
 func WithHTTPClient(httpClient *http.Client) ClientOption {
 	return func(o *options) {
 		o.httpClient = httpClient
