@@ -28,23 +28,21 @@ type clientImpl struct {
 	HTTPClient *http.Client
 }
 
-type ClientOption func(*option)
-
-type option struct {
-	baseURL    string
-	httpClient *http.Client
-}
-
 // NewClient returns a new Client.
 func NewClient(opts ...ClientOption) (Client, error) {
-	var o option
+	var o options
 	for _, fn := range opts {
 		fn(&o)
 	}
 
-	rawBaseURL := defaultBaseURL
+	rawBaseURL := defaultOptions.baseURL
 	if o.baseURL != "" {
 		rawBaseURL = o.baseURL
+	}
+
+	httpClient := defaultOptions.httpClient
+	if o.httpClient != nil {
+		httpClient = o.httpClient
 	}
 
 	baseURL, err := url.Parse(rawBaseURL)
@@ -52,29 +50,10 @@ func NewClient(opts ...ClientOption) (Client, error) {
 		return nil, errors.Wrap(err, "failed to parse URL")
 	}
 
-	httpClient := http.DefaultClient
-	if o.httpClient != nil {
-		httpClient = o.httpClient
-	}
-
 	return &clientImpl{
 		BaseURL:    baseURL,
 		HTTPClient: httpClient,
 	}, nil
-}
-
-// WithBaseURL sets baseURL as ClientOption
-func WithBaseURL(baseURL string) ClientOption {
-	return func(o *option) {
-		o.baseURL = baseURL
-	}
-}
-
-// WithHTTPClient sets httpClient as ClientOption
-func WithHTTPClient(httpClient *http.Client) ClientOption {
-	return func(o *option) {
-		o.httpClient = httpClient
-	}
 }
 
 // GetCategories retrieves all the video categories.
