@@ -137,7 +137,7 @@ func (c *clientImpl) SearchVideos(ctx context.Context, query, page string) (Sear
 		page = defaultPage
 	}
 
-	rawPath := fmt.Sprintf("/search/%s/%s", query, page)
+	rawPath := fmt.Sprintf("/search/%s/%s", url.PathEscape(query), page)
 	resp, err := c.get(ctx, rawPath)
 	if err != nil {
 		return SearchVideosResp{}, err
@@ -165,7 +165,7 @@ func (c *clientImpl) SearchJAVs(ctx context.Context, query, page string) (Search
 		page = defaultPage
 	}
 
-	rawPath := fmt.Sprintf("/jav/%s/%s", query, page)
+	rawPath := fmt.Sprintf("/jav/%s/%s", url.PathEscape(query), page)
 	resp, err := c.get(ctx, rawPath)
 	if err != nil {
 		return SearchJAVsResp{}, err
